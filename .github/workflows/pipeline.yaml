@@ -1,0 +1,28 @@
+name: Build Test Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository    
+      uses: actions/checkout@v4
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18.x
+        cache: 'npm'
+    - name: Install package.json dependances
+      run: npm install
+    - name: Start backend
+      run: npm run start-be
+    - name: Start frontend
+      run: npm run start-fe
+    - name: Execute Playwright UI tests
+      run: npm run ui-tests
+    - run: npm ci
