@@ -33,7 +33,7 @@ test("verify all books link is visible after user is logged in", async ({ page }
     await page.fill('#password', '123456');
     await page.click('#login-form .button.submit');
 
-    const allBooksLink = await page.$('a[id=logoutBtn]');
+    const allBooksLink = await page.$('#logoutBtn');
     const isVisible = await allBooksLink.isVisible();
     expect(isVisible).toBe(true);
 });
