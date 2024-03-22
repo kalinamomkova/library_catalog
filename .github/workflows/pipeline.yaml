@@ -31,4 +31,23 @@ jobs:
       run: npx playwright install
     - name: Execute Playwright UI tests
       run: npm run ui-tests
-    - run: npm ci
+  deploy-be:
+    runs-on: ubuntu-latest
+    needs: build_and_test
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Deploy to production
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+       service-id: ${{ secrets.SERVICE_BE_ID }}
+       api-key: ${{ secrets.RENDER_SECRET }}
+  deploy-fe:
+    runs-on: ubuntu-latest
+    needs: deploy-be
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Deploy to production
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.SERVICE_FE_ID }}
+        api-key: ${{ secrets.RENDER_SECRET }}
